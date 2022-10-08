@@ -1,5 +1,5 @@
 #!/bin/bash
-dir=/home/suchida/data
+dir=/home/tkitagaw/data
 name=$1
 ls ${dir}/${name} >/dev/null 2>&1
 if [ $? -ne 0 ]; then

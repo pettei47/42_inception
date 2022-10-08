@@ -19,7 +19,7 @@ services:
     image: nginx
     init: true
     container_name: some-nginx
-    hostname: suchida
+    hostname: tkitagaw
     domainname: 42.fr
     ports:
       - "443:443"
@@ -49,12 +49,12 @@ volumes:
   mariadb-vol:
     driver_opts:
       type: none
-      device: /home/suchida/data/mariadb
+      device: /home/tkitagaw/data/mariadb
       o: bind
   wordpress-vol:
     driver_opts:
       type: none
-      device: /home/suchida/data/wordpress
+      device: /home/tkitagaw/data/wordpress
       o: bind
 
 networks:
