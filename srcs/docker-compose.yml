@@ -34,6 +34,8 @@ services:
     restart: always
     ports:
       - "${NGINX_PORT}:443"
+    expose:
+      - "443"
     volumes:
       - website:/var/www/html
     networks:

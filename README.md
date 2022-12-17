@@ -10,18 +10,23 @@ or
 make d    //then, docker running on background
 ```
 
-Access to https://tkitagaw.42.fr  
-(`http` is invalid)
+- Access to https://tkitagaw.42.fr  
+  - (`http` is invalid)
 
-You can also access the wordpress login page at  
-https://tkitagaw.42.fr/wp-login.php
+- You can also access the wordpress login page at https://tkitagaw.42.fr/wp-login.php
 
 ### How to stop
 
-```
-# press ctrl + c // If you built the docker by `make d`, this is not necessary.
+- press ctrl + c
+  - If you built the docker by `make d`, this is not necessary.
 
+```
 make down
+```
+
+## Before finish review
+- Due to clean your VM & reset /etc/hosts
+```
 make fclean
 ```
 
