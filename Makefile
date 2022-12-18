@@ -46,7 +46,7 @@ cclean:
 	docker rm $(docker ps -qa)
 
 iclean:
-	docker rmi $(docker images -qa)
+	docker rmi -f $(docker images -qa)
 
 vclean:
 	sudo rm -rf ${VOLUME_DIR}/${VOLUME_WEBSITE} ${VOLUME_DIR}/${VOLUME_DB}
