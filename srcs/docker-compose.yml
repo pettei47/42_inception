@@ -1,0 +1,60 @@
+version: "3"
+services:
+  mariadb:
+    build: requirements/mariadb
+    image: mariadb
+    restart: always
+    expose:
+      - "3306"
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - net
+    tty: true
+    env_file: .env
+
+  wordpress:
+    build: requirements/wordpress
+    image: wordpress
+    restart: always
+    expose:
+      - "9000"
+    volumes:
+      - website:/var/www/html
+    networks:
+      - net
+    tty: true
+    depends_on:
+      - mariadb
+    env_file: .env
+
+  nginx:
+    build: requirements/nginx
+    image: nginx
+    restart: always
+    ports:
+      - "${NGINX_PORT}:443"
+    volumes:
+      - website:/var/www/html
+    networks:
+      - net
+    tty: true
+    depends_on:
+      - wordpress
+
+networks:
+  net:
+
+# https://qiita.com/reflet/items/5c0a488494c7d6904084
+# https://zenn.dev/ningensei848/scraps/22b312d5195979
+volumes:
+  db:
+    driver_opts:
+      type: none
+      device: ${VOLUME_DIR}/${VOLUME_DB}
+      o: bind
+  website:
+    driver_opts:
+      type: none
+      device: ${VOLUME_DIR}/${VOLUME_WEBSITE}
+      o: bind
