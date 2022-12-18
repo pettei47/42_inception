@@ -59,13 +59,13 @@ re: clean all
 
 re_d: clean d
 
-iclean_mysql: down stop
+iclean_mysql: down
 	docker rmi $(docker images mariadb -q)
 
-iclean_wp: down stop
+iclean_wp: down
 	docker rmi $(docker images wordpress -q)
 
-iclean_nginx: down stop
+iclean_nginx: down
 	docker rmi $(docker images nginx -q)
 
 exec_mysql:
