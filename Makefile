@@ -1,13 +1,13 @@
 include srcs/.env
 
-NEW_HOSTS			=	./hosts
+NEW_HOSTS			=	./new_hosts
 ORIGIN_HOSTS	=	./origin_hosts
 
 
-all: ${ORIGIN_HOSTS} ${NEW_HOSTS} ${VOLUME_DIR}/${VOLUME_WEBSITE} ${VOLUME_DIR}/${VOLUME_DB}
+all: host volume
 	cd srcs && docker-compose up --build
 
-d: ${ORIGIN_HOSTS} ${NEW_HOSTS} ${VOLUME_DIR}/${VOLUME_WEBSITE} ${VOLUME_DIR}/${VOLUME_DB}
+d: host volume
 	cd srcs && docker-compose up --build -d
 
 ${ORIGIN_HOSTS}:
@@ -30,7 +30,10 @@ volume: ${VOLUME_DIR}/${VOLUME_WEBSITE} ${VOLUME_DIR}/${VOLUME_DB}
 down:
 	cd srcs && docker-compose down
 
-stop: down
+start:
+	cd srcs && docker-compose start
+
+stop:
 	docker stop $(docker ps -qa)
 
 cclean:
@@ -43,24 +46,38 @@ vclean:
 	sudo rm -rf ${VOLUME_DIR}/${VOLUME_WEBSITE} ${VOLUME_DIR}/${VOLUME_DB}
 	docker volume rm $$(docker volume ls -q)
 
-hclean:
+hclean: ${ORIGIN_HOSTS} ${NEW_HOSTS}
 	sudo cp ${ORIGIN_HOSTS} /etc/hosts
 	rm ${ORIGIN_HOSTS} ${NEW_HOSTS}
 
-clean:
+clean: down
 	docker system prune -f
 
-fclean: clean cclean iclean vclean hclean
+fclean: hclean clean vclean 
 
-re: fclean all
+re: clean all
+
+re_d: clean d
+
+iclean_mysql: down stop
+	docker rmi $(docker images mariadb -q)
+
+iclean_wp: down stop
+	docker rmi $(docker images wordpress -q)
+
+iclean_nginx: down stop
+	docker rmi $(docker images nginx -q)
 
 exec_mysql:
 	cd srcs && docker-compose exec mariadb /bin/ash
 
-exec_wordpress:
+exec_wp:
 	cd srcs && docker-compose exec wordpress /bin/ash
 
 exec_nginx:
 	cd srcs && docker-compose exec nginx /bin/ash
 
-.PHONY: all d host volume down stop vclean iclean hclean clean fclean re exec_mysql exec_wordpress exec_nginx
+.PHONY: all d host volume down stop start \
+				vclean iclean hclean clean fclean re re_d \
+				iclean_mysql iclean_wp iclean_nginx \
+				exec_mysql exec_wordpress exec_nginx
