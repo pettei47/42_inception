@@ -40,7 +40,7 @@ hclean:
 clean:
 	docker system prune -f
 
-fclean: clean volume_clean image_clean host_clean
+fclean: clean vclean iclean hclean
 
 re: fclean all
 
